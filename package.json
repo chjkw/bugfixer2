@@ -10,7 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onLanguage:c"
+		"onLanguage:c",
+		"onLanguage:java"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
