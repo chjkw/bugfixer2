@@ -14,7 +14,7 @@ export function pathExists(p: string): boolean {
 export function getCwd(): string {
 	if(vscode.workspace.workspaceFolders === undefined) return "";
 
-  return vscode.workspace.workspaceFolders[0].uri.path.slice(1);
+  return vscode.workspace.workspaceFolders[0].uri.fsPath;
 } 
 
 function insertLine(data: Array<string>, line:number, contents: string): Array<string> {
@@ -45,3 +45,9 @@ function manipulateFile(func: Function): (src: string, dst: string, line: number
 	} 
 }
 
+// json 파일에서 읽어들이기
+export function readJSON<T>(jsonPath: string): T {
+	const jsonString = fs.readFileSync(jsonPath, 'utf-8');
+	const data: T = JSON.parse(jsonString);
+	return data;
+}
