@@ -28,6 +28,9 @@ export class WebviewController {
             // 엔진 로그 찍을 때 이와 같은 형태로 사용
             this.printProgress("TESTING PRINT LOG FUNCTION", "01:47 PM", "test test message message extension extension");
         }));
+
+        vscode.commands.registerCommand("bugfixer.setStatus", (status:string) => this.setProgressStatus(status));
+        vscode.commands.registerCommand("bugfixer.updateLog", (title: string, time: string, message: string) => this.printProgress(title, time, message));
     }
   
     public dispose() {
