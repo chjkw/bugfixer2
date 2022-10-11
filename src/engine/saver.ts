@@ -1,16 +1,18 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as child_process from "child_process";
 
 import { Engine } from "./engine";
 import { Bug, SaverBug } from "../dto/bug";
-import { SaverPatch} from '../dto/saverPatch';
+import { SaverPatch} from '../dto/patch';
 import * as util from '../common/util';
 import * as log_util from "../common/logger";
+import { constants } from 'buffer';
 
 export class SaverEngine extends Engine {
     private logger: log_util.Logger;
+
+    private _cwd = "/home/workspace";
 
     constructor() {
         super("Saver", "docker", "infer-out");
@@ -19,18 +21,18 @@ export class SaverEngine extends Engine {
     }
 
     public get_incremental_cmd(): string[] {
-        const cmd: string[] = ["run", "-g", "--reactive", "--continue", "--"];
-        return cmd.concat(this.build_cmd.split(" "));
+        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
+        return cmd.concat("/app/saver/bin/infer run -g --reactive --continue -- " + this.build_cmd.split(" "));
     }
 
     public get_analysis_cmd(): string[] {
-        const cmd: string[] = ["run", "-g", "--reactive", "--"];
-        return cmd.concat(this.clean_build_cmd.split(" "));
+        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
+        return cmd.concat("/app/saver/bin/infer run -g --reactive -- " + this.clean_build_cmd);
     }
 
     public get_patch_cmd(errorKey: string): string[] {
-        const cmd: string[] = ["saver", "--error-report", this.get_errorData_path_by_key(errorKey)];
-        return cmd;
+        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
+        return cmd.concat("/app/saver/bin/infer saver --error-report " + this.get_errorData_path_by_key(errorKey));
     }
 
     public get_file_bugs_map(): Map<string, Bug[]> {
@@ -101,7 +103,7 @@ export class SaverEngine extends Engine {
     public make_patch(errorKey: string): void {
         let patch = "";
         const cwd = util.getCwd();
-
+    
         const patch_data_file = path.join(cwd, this.patch_data_path, `${errorKey}.log`);
 
         if(!util.pathExists(patch_data_file)) {
@@ -188,7 +190,7 @@ export class SaverEngine extends Engine {
     }
 
     private get_errorData_path_by_key(errorKey: string): string {
-        return path.join(util.getCwd(), this.patch_input_path, `${errorKey}.json`);
+        return path.join("/home/workspace", this.patch_input_path, `${errorKey}.json`);
     }
 
     private get_errorData_path(bug: Bug): string {

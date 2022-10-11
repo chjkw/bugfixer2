@@ -44,11 +44,7 @@ export class EngineController {
     analyzer.build_cmd = "make";
     analyzer.clean_build_cmd = "make clean all"
     console.log(util.getCwd());
-    //let args: string[] = analyzer.get_analysis_cmd();
-
-    const args_tmp = "run -w /home/workspace/sample/vol/WavPack -v " + util.getCwd() + ":/home/workspace/sample/vol/WavPack saver_docker_build:0.0.2 /bin/bash -c"
-    let args: string[] = args_tmp.split(" ");
-    args.push("/home/workspace/sample/vol/WavPack/build.sh && /app/saver/bin/infer run -- make -j4");
+    let args: string[] = analyzer.get_analysis_cmd();
 
     const output_path = path.join(util.getCwd(), analyzer.output_path);
     if (util.pathExists(output_path)) {
@@ -125,6 +121,9 @@ export class EngineController {
     }
 
     const windowController = new wc.WindowController(this.logger, "");
+    const args = patch_maker.get_patch_cmd(key);
+    vscode.window.showInformationMessage(`${patch_maker.analyze_cmd} ${args.join(" ")}`);
+    this.logger.info(`${patch_maker.analyze_cmd} ${args.join(" ")}`);
     windowController.runWithProgress('패치 생성', patch_maker.name, patch_maker.analyze_cmd, patch_maker.get_patch_cmd(key), stdoutHandler, stderrHandler, exitHandler);
   }
   
