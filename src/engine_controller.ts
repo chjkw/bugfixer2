@@ -76,9 +76,30 @@ export class EngineController {
       if (log.includes("Starting Process...")) {
         progress.report({ message: `${analyzer.name} 실행 중` });
       }
+
+      if (log.includes("Capturing in")) {
+        vscode.commands.executeCommand('bugfixer.setStatus', "Build");
+      }
+
+      if (log.includes("Starting analysis...")) {
+        vscode.commands.executeCommand('bugfixer.setStatus', "Analyze");
+      }
+      
+      vscode.commands.executeCommand('bugfixer.updateLog', "실행..", "", log);
     }
     
-    const stdoutHandler = (data:any) => {}
+    const stdoutHandler = (data:any) => {
+      const log = data.log;
+      if (log.includes("Capturing in")) {
+        vscode.commands.executeCommand('bugfixer.setStatus', "Build");
+      }
+
+      if (log.includes("Starting analysis...")) {
+        vscode.commands.executeCommand('bugfixer.setStatus', "Analyze");
+      }
+
+      vscode.commands.executeCommand('bugfixer.updateLog', "실행..", "", log);
+    }
     const exitHandler = (data:any) => { 
       vscode.commands.executeCommand('bugfixer.refreshBugs'); 
     }
