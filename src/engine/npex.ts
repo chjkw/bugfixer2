@@ -91,6 +91,10 @@ export class NPEXEngine extends Engine {
         return [];
     }
 
+	public logHandler(log: string): string {
+        return log;        
+    }
+    
 
 
 }

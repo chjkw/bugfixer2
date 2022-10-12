@@ -7,12 +7,9 @@ import { Bug, SaverBug } from "../dto/bug";
 import { SaverPatch} from '../dto/patch';
 import * as util from '../common/util';
 import * as log_util from "../common/logger";
-import { constants } from 'buffer';
 
 export class SaverEngine extends Engine {
     private logger: log_util.Logger;
-
-    private _cwd = "/home/workspace";
 
     constructor() {
         super("Saver", "docker", "infer-out");
@@ -199,5 +196,17 @@ export class SaverEngine extends Engine {
 
     public set_build_cmd(build_cmd: string): void {
         this.build_cmd = build_cmd;
+    }
+
+    public logHandler(log: string): string {
+        this.logger.debug(`##logHandler: ${log}`)
+        if (log.includes("Capturing in")) return `[Build] ${log}`;
+        if (log.includes("Starting analysis...")) return `[Analyze] ${log}`;
+        
+        if (log.includes("Starting Process...")) {
+            return `[Progress] ${this.name} 실행 시작`;
+        }
+
+        return `[실행..] ${log}`;
     }
 }

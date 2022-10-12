@@ -11,7 +11,7 @@
     <script src="WEBVIEWJS"></script>
 
     <template id="template-log">
-        <div class="vertical-timeline-item vertical-timeline-element">
+        <div class="vertical-timeline-item vertical-timeline-element vertical-timeline--animate">
             <div>
                 <span class="vertical-timeline-element-icon bounce-in">
                     <i class="badge badge-dot badge-dot-xl badge-success"> </i>
@@ -42,13 +42,8 @@
                                         <h5 class="font-size-16">빌드</h5>
                                         <p class="text-muted">오류를 찾는 데 필요한 정보를<br>
                                             수집하는 과정입니다.</p>
-                                        <div>
-                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
-                                                href="#buildReadMore" role="button" aria-expanded="false"
-                                                aria-controls="buildReadMore">자세히</a>
-                                        </div>
                                         <div id="buildReadMore"
-                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            class="expand vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                                         </div>
                                     </div>
                                 </li>
@@ -58,13 +53,8 @@
                                         <h5 class="font-size-16">분석</h5>
                                         <p class="text-muted">프로그램에 있는 오류를<br>
                                             찾는 과정입니다.</p>
-                                        <div>
-                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
-                                                href="#analyzeReadMore" role="button" aria-expanded="false"
-                                                aria-controls="analyzeReadMore">자세히 보기</a>
-                                        </div>
                                         <div id="analyzeReadMore"
-                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            class="expand vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                                         </div>
                                     </div>
                                 </li>
@@ -75,13 +65,8 @@
                                         <p class="text-muted">분석 단계에서 발견한 오류를<br> 
                                             해결할 수 있는 코드를<br>
                                             만드는 과정입니다.</p>
-                                        <div>
-                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
-                                                href="#patchReadMore" role="button" aria-expanded="false"
-                                                aria-controls="patchReadMore">자세히</a>
-                                        </div>
                                         <div id="patchReadMore"
-                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            class="expand vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                                         </div>
                                     </div>
                                 </li>
@@ -91,13 +76,8 @@
                                         <h5 class="font-size-16">검증</h5>
                                         <p class="text-muted">생성된 패치가 올바른지<br>
                                             확인하는 단계입니다.</p>
-                                        <div>
-                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
-                                                href="#validateReadMore" role="button" aria-expanded="false"
-                                                aria-controls="validateReadMore">자세히</a>
-                                        </div>
                                         <div id="validateReadMore"
-                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            class="expand vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                                         </div>
                                     </div>
                                 </li>

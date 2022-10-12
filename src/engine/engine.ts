@@ -19,6 +19,7 @@ export abstract class Engine {
     abstract make_patch(key: string): void;
     abstract apply_patch(src: string, patched: string): void;
     abstract get_error_key(bug: Bug): string;
+    abstract logHandler(log: string): string;
     
     constructor(name:string, analyze_cmd:string, output_path:string){
         this._name = name;
@@ -79,4 +80,6 @@ export abstract class Engine {
     public get patched_path(): string {
         return this._patched_path;
     }
+
+    
 }

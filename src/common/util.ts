@@ -51,3 +51,15 @@ export function readJSON<T>(jsonPath: string): T {
 	const data: T = JSON.parse(jsonString);
 	return data;
 }
+
+export function padTo2Digits(num: number) {
+	return num.toString().padStart(2, '0');
+}
+
+export function getTime(date: Date):string {
+	return ([
+		padTo2Digits(date.getHours()),
+		padTo2Digits(date.getMinutes()),
+		padTo2Digits(date.getSeconds()),
+	].join(':'));
+}
