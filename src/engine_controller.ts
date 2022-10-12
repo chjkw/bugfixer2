@@ -100,33 +100,7 @@ export class EngineController {
       });
     }
     
-    const stdoutHandler = (data:any) => {
-      const progress = data.progress;
-
-      this.logger.debug(`!!! ${data.log} !!!`);
-      
-      const logs = data.log.split(/\r?\n/);
-      logs.forEach((l:string) => {
-        this.logger.debug(`stdout: ${l}`);
-        const log = analyzer.logHandler(l.trim());
-
-        var arr = log.match(/\[(.*)\] (.*)/);
-
-        if (arr?.length != 3) {
-          return;
-        }
-
-        const title = arr[1];
-        const message = arr[2];
-
-        if (title == "Progress") progress.report({ message: message });
-        else if (title == "Build") vscode.commands.executeCommand('bugfixer.setStatus', "Build");
-        else if (title == "Analyze") vscode.commands.executeCommand('bugfixer.setStatus', "Analyze");
-        else if (title == "Patch]") vscode.commands.executeCommand('bugfixer.setStatus', "Patch");
-        else if (title == "Validate") vscode.commands.executeCommand('bugfixer.setStatus', "Validate");
-        else vscode.commands.executeCommand('bugfixer.updateLog', title, util.getTime(new Date()), message);
-      });
-    }
+    const stdoutHandler = (data:any) => stderrHandler
 
     const exitHandler = (data:any) => { 
       vscode.commands.executeCommand('bugfixer.refreshBugs');

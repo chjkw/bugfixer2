@@ -199,7 +199,8 @@ export class SaverEngine extends Engine {
     }
 
     public logHandler(log: string): string {
-        this.logger.debug(`##logHandler: ${log}`)
+        if(log == "") return "";
+
         if (log.includes("Capturing in")) return `[Build] ${log}`;
         if (log.includes("Starting analysis...")) return `[Analyze] ${log}`;
         
@@ -207,6 +208,12 @@ export class SaverEngine extends Engine {
             return `[Progress] ${this.name} 실행 시작`;
         }
 
-        return `[실행..] ${log}`;
+        if(log.startsWith("legend:")) return "";
+        if(log.startsWith("\"")) return "";
+
+        if(log == ("F")) return "[분석] 파일 분석 중..";
+        if(log == (".")) return "[분석] 함수 분석 중..";
+
+        return `[Info] ${log}`;
     }
 }
