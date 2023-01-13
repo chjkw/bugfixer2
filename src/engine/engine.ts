@@ -20,11 +20,7 @@ export abstract class Engine {
     abstract make_patch(key: string): void;
     abstract apply_patch(src: string, patched: string): void;
     abstract get_error_key(bug: Bug): string;
-<<<<<<< HEAD
     abstract get_patches(): PatchLineInfo[];
-=======
-    abstract logHandler(log: string): string;
->>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     
     constructor(name:string, analyze_cmd:string, output_path:string){
         this._name = name;

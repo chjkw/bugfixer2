@@ -65,18 +65,12 @@ export class EngineController {
 
     this.logger.info(`${analyzer.analyze_cmd} ${args.join(" ")}`);
 
-<<<<<<< HEAD
     //Create output channel
     let bugfixerChannel = vscode.window.createOutputChannel("Bugfixer");
-=======
-    vscode.commands.executeCommand('bugfixer.progress_detail', null);
-    vscode.commands.executeCommand('bugfixer.setStatus', "Build");
->>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
 
     const stderrHandler = (data:any) => {
       const progress = data.progress;
 
-<<<<<<< HEAD
       if (log.includes("Starting Process...")) {
         progress.report({ message: `Bugfixer 실행 중` });
       }
@@ -95,38 +89,6 @@ export class EngineController {
       if (analyzer.name === 'Moses') {
         analyzer.make_patch("");
       }
-=======
-      this.logger.debug(`!!! ${data.log} !!!`);
-      
-      const logs = data.log.split(/\r?\n/);
-      logs.forEach((l:string) => {
-        this.logger.debug(`stderr: ${l}`);
-        const log = analyzer.logHandler(l.trim());
-
-        var arr = log.match(/\[(.*)\] (.*)/);
-
-        if (arr?.length != 3) {
-          return;
-        }
-
-        const title = arr[1];
-        const message = arr[2];
-
-        if (title == "Progress") progress.report({ message: message });
-        else if (title == "Build") vscode.commands.executeCommand('bugfixer.setStatus', "Build");
-        else if (title == "Analyze") vscode.commands.executeCommand('bugfixer.setStatus', "Analyze");
-        else if (title == "Patch]") vscode.commands.executeCommand('bugfixer.setStatus', "Patch");
-        else if (title == "Validate") vscode.commands.executeCommand('bugfixer.setStatus', "Validate");
-        else vscode.commands.executeCommand('bugfixer.updateLog', title, util.getTime(new Date()), message);
-      });
-    }
-    
-    const stdoutHandler = (data:any) => stderrHandler
-
-    const exitHandler = (data:any) => { 
-      vscode.commands.executeCommand('bugfixer.refreshBugs');
-      vscode.commands.executeCommand('bugfixer.updateLog', "완료", "", "분석이 완료되었습니다.");
->>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     }
 
     const windowController = new wc.WindowController(this.logger, "");

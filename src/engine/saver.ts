@@ -26,7 +26,6 @@ export class SaverEngine extends Engine {
     }
 
     public get_analysis_cmd(): string[] {
-<<<<<<< HEAD
         const cmd: string[] = ["run", "-w", "/home/workspace/sample/benchmarks/WavPack", "-v", `${util.getCwd()}/infer-out:/home/workspace/sample/benchmarks/WavPack/infer-out`, "juniair/saver_docker:0.1.2","/bin/bash", "-c"];
         cmd.push("./autogen.sh && /app/saver/bin/infer run -- make -j4");
         return cmd;
@@ -37,15 +36,6 @@ export class SaverEngine extends Engine {
         cmd.push(`/app/saver/bin/infer saver --error-report ${this.get_errorData_path_by_key(errorKey)}`);
         return cmd;
 
-=======
-        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
-        return cmd.concat("/app/saver/bin/infer run -g --reactive -- " + this.clean_build_cmd);
-    }
-
-    public get_patch_cmd(errorKey: string): string[] {
-        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
-        return cmd.concat("/app/saver/bin/infer saver --error-report " + this.get_errorData_path_by_key(errorKey));
->>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     }
 
     public get_file_bugs_map(): Map<string, Bug[]> {
