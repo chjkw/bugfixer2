@@ -14,6 +14,7 @@ export class WindowController {
   public errMsg = "";
   
   public constructor(private logger: log_util.Logger, public prop: any) {
+    this.logger = new log_util.Logger("WindowController");
   }
     
   public runWithProgress(
@@ -45,16 +46,23 @@ export class WindowController {
 
           process.stderr.on("data", data => {
             let log: string = data.toString();
-            this.logger.debug(log);
+            this.logger.debug(`stderr: ${log}`);
 
             stderrHandler({log: log, progress: progress});
           });
 
           process.stdout.on("data", data => {
             let log: string = data.toString();
+<<<<<<< HEAD
             this.logger.debug(log);
             //progress.report({ message: log });
             stdoutHandler(log);
+=======
+            this.logger.debug(`stdout: ${log}`);
+            stdoutHandler({log: log, progress: progress});
+            progress.report({ message: log });
+            
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
           });
 
           process.on("exit", (code, signal) => {

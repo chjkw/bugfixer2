@@ -16,8 +16,12 @@
 	],
 	"activationEvents": [
 		"onLanguage:c",
+<<<<<<< HEAD
 		"onLanguage:java",
 		"onLanguage:python"
+=======
+		"onLanguage:java"
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
 	],
 	"main": "./out/extension.js",
 	"contributes": {

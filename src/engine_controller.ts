@@ -28,7 +28,7 @@ export class EngineController {
     this._commandForRunPyter  = this.registerRunCommand("bugfixer.run_pyter", "pyter");
 
     vscode.commands.registerCommand(constants.MAKE_PATCH_COMMAND, (key) => this.make_patch(key))
-    this.logger = new log_util.Logger("BugfixerController");
+    this.logger = new log_util.Logger("EngineController");
   }
 
   public dispose() {
@@ -65,13 +65,18 @@ export class EngineController {
 
     this.logger.info(`${analyzer.analyze_cmd} ${args.join(" ")}`);
 
+<<<<<<< HEAD
     //Create output channel
     let bugfixerChannel = vscode.window.createOutputChannel("Bugfixer");
+=======
+    vscode.commands.executeCommand('bugfixer.progress_detail', null);
+    vscode.commands.executeCommand('bugfixer.setStatus', "Build");
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
 
     const stderrHandler = (data:any) => {
       const progress = data.progress;
-      const log = data.log;
 
+<<<<<<< HEAD
       if (log.includes("Starting Process...")) {
         progress.report({ message: `Bugfixer 실행 중` });
       }
@@ -90,6 +95,38 @@ export class EngineController {
       if (analyzer.name === 'Moses') {
         analyzer.make_patch("");
       }
+=======
+      this.logger.debug(`!!! ${data.log} !!!`);
+      
+      const logs = data.log.split(/\r?\n/);
+      logs.forEach((l:string) => {
+        this.logger.debug(`stderr: ${l}`);
+        const log = analyzer.logHandler(l.trim());
+
+        var arr = log.match(/\[(.*)\] (.*)/);
+
+        if (arr?.length != 3) {
+          return;
+        }
+
+        const title = arr[1];
+        const message = arr[2];
+
+        if (title == "Progress") progress.report({ message: message });
+        else if (title == "Build") vscode.commands.executeCommand('bugfixer.setStatus', "Build");
+        else if (title == "Analyze") vscode.commands.executeCommand('bugfixer.setStatus', "Analyze");
+        else if (title == "Patch]") vscode.commands.executeCommand('bugfixer.setStatus', "Patch");
+        else if (title == "Validate") vscode.commands.executeCommand('bugfixer.setStatus', "Validate");
+        else vscode.commands.executeCommand('bugfixer.updateLog', title, util.getTime(new Date()), message);
+      });
+    }
+    
+    const stdoutHandler = (data:any) => stderrHandler
+
+    const exitHandler = (data:any) => { 
+      vscode.commands.executeCommand('bugfixer.refreshBugs');
+      vscode.commands.executeCommand('bugfixer.updateLog', "완료", "", "분석이 완료되었습니다.");
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     }
 
     const windowController = new wc.WindowController(this.logger, "");
@@ -110,8 +147,12 @@ export class EngineController {
 
     let patch_maker_result = "";
 
+<<<<<<< HEAD
     //Create output channel
     let bugfixerChannel = vscode.window.createOutputChannel("Bugfixer");
+=======
+    vscode.commands.executeCommand('bugfixer.setStatus', "Patch");
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
 
     const stdoutHandler = (data:any) => {
       patch_maker_result += data.toString();
@@ -134,9 +175,13 @@ export class EngineController {
       fs.writeFileSync(patchFile, patch_maker_result, 'utf8');
       
       patch_maker.make_patch(key);
+      vscode.commands.executeCommand('bugfixer.updateLog', "완료", "", "패치 생성이 완료되었습니다.");
     }
 
     const windowController = new wc.WindowController(this.logger, "");
+    const args = patch_maker.get_patch_cmd(key);
+    vscode.window.showInformationMessage(`${patch_maker.analyze_cmd} ${args.join(" ")}`);
+    this.logger.info(`${patch_maker.analyze_cmd} ${args.join(" ")}`);
     windowController.runWithProgress('패치 생성', patch_maker.name, patch_maker.analyze_cmd, patch_maker.get_patch_cmd(key), stdoutHandler, stderrHandler, exitHandler);
   }
   

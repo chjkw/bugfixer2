@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as child_process from "child_process";
 
 import { Engine } from "./engine";
 import { Bug, SaverBug } from "../dto/bug";
-import { SaverPatch} from '../dto/saverPatch';
+import { SaverPatch} from '../dto/patch';
 import * as util from '../common/util';
 import * as log_util from "../common/logger";
 import { PatchLineInfo } from '../results/diagnostics';
@@ -22,11 +21,12 @@ export class SaverEngine extends Engine {
     }
 
     public get_incremental_cmd(): string[] {
-        const cmd: string[] = ["run", "-g", "--reactive", "--continue", "--"];
-        return cmd.concat(this.build_cmd.split(" "));
+        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
+        return cmd.concat("/app/saver/bin/infer run -g --reactive --continue -- " + this.build_cmd.split(" "));
     }
 
     public get_analysis_cmd(): string[] {
+<<<<<<< HEAD
         const cmd: string[] = ["run", "-w", "/home/workspace/sample/benchmarks/WavPack", "-v", `${util.getCwd()}/infer-out:/home/workspace/sample/benchmarks/WavPack/infer-out`, "juniair/saver_docker:0.1.2","/bin/bash", "-c"];
         cmd.push("./autogen.sh && /app/saver/bin/infer run -- make -j4");
         return cmd;
@@ -37,6 +37,15 @@ export class SaverEngine extends Engine {
         cmd.push(`/app/saver/bin/infer saver --error-report ${this.get_errorData_path_by_key(errorKey)}`);
         return cmd;
 
+=======
+        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
+        return cmd.concat("/app/saver/bin/infer run -g --reactive -- " + this.clean_build_cmd);
+    }
+
+    public get_patch_cmd(errorKey: string): string[] {
+        const cmd: string[] = ["run", "-w", "/home/workspace", "-v", `${util.getCwd()}:/home/workspace`, "juniair/saver_docker:0.1.2", "/bin/bash", "-c"];
+        return cmd.concat("/app/saver/bin/infer saver --error-report " + this.get_errorData_path_by_key(errorKey));
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     }
 
     public get_file_bugs_map(): Map<string, Bug[]> {
@@ -107,7 +116,7 @@ export class SaverEngine extends Engine {
     public make_patch(errorKey: string): void {
         let patch = "";
         const cwd = util.getCwd();
-
+    
         const patch_data_file = path.join(cwd, this.patch_data_path, `${errorKey}.log`);
 
         if(!util.pathExists(patch_data_file)) {
@@ -194,7 +203,11 @@ export class SaverEngine extends Engine {
     }
 
     private get_errorData_path_by_key(errorKey: string): string {
+<<<<<<< HEAD
         return path.join(this.patch_input_path, `${errorKey}.json`).replaceAll("\\", "/");
+=======
+        return path.join("/home/workspace", this.patch_input_path, `${errorKey}.json`);
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     }
 
     private get_errorData_path(bug: Bug): string {
@@ -205,7 +218,27 @@ export class SaverEngine extends Engine {
         this.build_cmd = build_cmd;
     }
 
+<<<<<<< HEAD
     public get_patches(): PatchLineInfo[] {
         return [];
+=======
+    public logHandler(log: string): string {
+        if(log == "") return "";
+
+        if (log.includes("Capturing in")) return `[Build] ${log}`;
+        if (log.includes("Starting analysis...")) return `[Analyze] ${log}`;
+        
+        if (log.includes("Starting Process...")) {
+            return `[Progress] ${this.name} 실행 시작`;
+        }
+
+        if(log.startsWith("legend:")) return "";
+        if(log.startsWith("\"")) return "";
+
+        if(log == ("F")) return "[분석] 파일 분석 중..";
+        if(log == (".")) return "[분석] 함수 분석 중..";
+
+        return `[Info] ${log}`;
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     }
 }

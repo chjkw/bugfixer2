@@ -10,6 +10,7 @@ export class Patch {
     ) {}
 }
 
+<<<<<<< HEAD
 export class NPEXPatch {
     public constructor(
         public readonly patched_lines: number[]
@@ -19,6 +20,12 @@ export class NPEXPatch {
 export class NPEXResult {
     public constructor(
         public readonly verified_patches: string[]
+=======
+export class PatchLineInfo {
+	public constructor(
+        public readonly uri: string,
+        public readonly lines: number[]
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778
     ) {}
 }
 
@@ -31,6 +38,7 @@ export class SaverPatch {
     ) {}
 }
 
+<<<<<<< HEAD
 export class MosesPatch {
     constructor(
 		public readonly file: string,
@@ -54,3 +62,16 @@ export class PyterPatch {
   
 
 
+=======
+export class NPEXPatch {
+    public constructor(
+        public readonly patched_lines: number[]
+    ) {}
+}
+
+export class NPEXResult {
+    public constructor(
+        public readonly verified_patches: string[]
+    ) {}
+}
+>>>>>>> 9fa4c9f861cdbd09d4def5fddb84c999649cf778

@@ -6,6 +6,7 @@ import {
 import * as vscode from "vscode";
 import * as path from 'path';
 import * as fs from 'fs';
+import * as log_util from "../common/logger";
 
 export class WebviewController {
     private _commandForProgressDetail: Disposable;
@@ -16,9 +17,12 @@ export class WebviewController {
     
     // 임시로 build 로 설정  (다른 값으로 변경하면 추가되는 열 바뀜)
     private progressStatus: string = "Build";
+
+    private logger: log_util.Logger;
   
     public constructor(private context: vscode.ExtensionContext) {
-      this._commandForProgressDetail = commands.registerCommand("bugfixer.progress_detail",
+        this.logger = new log_util.Logger("WebviewController");
+        this._commandForProgressDetail = commands.registerCommand("bugfixer.progress_detail",
         (uri: vscode.Uri) => {
           this.progress_detail(uri, context);
         });
@@ -28,6 +32,9 @@ export class WebviewController {
             // 엔진 로그 찍을 때 이와 같은 형태로 사용
             this.printProgress("TESTING PRINT LOG FUNCTION", "01:47 PM", "test test message message extension extension");
         }));
+
+        vscode.commands.registerCommand("bugfixer.setStatus", (status:string) => this.setProgressStatus(status));
+        vscode.commands.registerCommand("bugfixer.updateLog", (title: string, time: string, message: string) => this.printProgress(title, time, message));
     }
   
     public dispose() {
